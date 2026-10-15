@@ -35,6 +35,12 @@ jobs:
             -keyalg RSA -keysize 2048 -validity 10000 \
             -dname "CN=Android Debug,O=Android,C=US"
 
+      # Supabase config read by the Secrets Gradle plugin
+      - name: Create .env
+        run: |
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+          echo "SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}" >> .env
+
       - name: Build Debug APK
         if: "!startsWith(github.ref, 'refs/tags/v')"
         run: gradle assembleDebug --stacktrace
