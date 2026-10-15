@@ -117,7 +117,7 @@ private fun WatchHistoryItem(
                 .clip(RoundedCornerShape(8.dp))
         ) {
             Image(
-                painter = painterResource(id = history.coverResId),
+                painter = if (history.coverResId != 0) painterResource(id = history.coverResId) else painterResource(id = android.R.drawable.ic_menu_gallery),
                 contentDescription = history.seriesTitle,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()

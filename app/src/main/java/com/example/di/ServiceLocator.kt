@@ -21,6 +21,12 @@ import com.example.ui.home.HomeViewModel
 import com.example.ui.player.PlayerViewModel
 import com.example.ui.profile.ProfileViewModel
 import com.example.ui.history.HistoryViewModel
+import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.realtime.Realtime
+import com.example.BuildConfig
 
 object ServiceLocator {
 
@@ -35,6 +41,9 @@ object ServiceLocator {
 
     @Volatile
     private var userDataRepository: UserDataRepository? = null
+
+    @Volatile
+    private var supabaseClient: SupabaseClient? = null
 
     fun initialize(context: Context) {
         val appContext = context.applicationContext
@@ -55,6 +64,16 @@ object ServiceLocator {
         if (userDataRepository == null) {
             val db = database!!
             userDataRepository = UserDataRepositoryImpl(preferencesManager!!, db.referralDao())
+        }
+        if (supabaseClient == null) {
+            supabaseClient = createSupabaseClient(
+                supabaseUrl = BuildConfig.SUPABASE_URL,
+                supabaseKey = BuildConfig.SUPABASE_ANON_KEY
+            ) {
+                install(Auth)
+                install(Postgrest)
+                install(Realtime)
+            }
         }
     }
 

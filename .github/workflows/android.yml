@@ -28,7 +28,7 @@ jobs:
       # Build Debug APK on main branch or dispatch
       - name: Build Debug APK
         if: "!startsWith(github.ref, 'refs/tags/v')"
-        run: ./gradlew assembleDebug --stacktrace
+        run: gradle assembleDebug --stacktrace
 
       - name: Upload Debug APK
         if: "!startsWith(github.ref, 'refs/tags/v')"
@@ -51,7 +51,7 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease --stacktrace
+        run: gradle assembleRelease --stacktrace
 
       - name: Upload Release APK Artifact
         if: startsWith(github.ref, 'refs/tags/v')
