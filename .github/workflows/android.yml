@@ -20,12 +20,21 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew || true
+      # The repo has no gradlew, so install Gradle directly (same version as gradle-wrapper.properties)
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 9.3.1
 
-      # Build Debug APK on main branch or dispatch
+      # app/build.gradle.kts expects ./debug.keystore, which is git-ignored
+      - name: Create debug keystore
+        run: |
+          keytool -genkeypair -v -keystore debug.keystore \
+            -storepass android -keypass android -alias androiddebugkey \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US"
+
       - name: Build Debug APK
         if: "!startsWith(github.ref, 'refs/tags/v')"
         run: gradle assembleDebug --stacktrace
@@ -38,18 +47,15 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
           retention-days: 14
 
-      # Build & Sign Release APK when release tag is pushed
       - name: Decode Keystore
         if: startsWith(github.ref, 'refs/tags/v')
-        run: |
-          echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 --decode > app/release-keystore.jks
+        run: echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 --decode > app/release-keystore.jks
 
       - name: Build Release APK
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           KEYSTORE_PATH: release-keystore.jks
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: gradle assembleRelease --stacktrace
 
