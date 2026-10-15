@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Stylized "D" with play triangle counter in center -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M32,28 L54,28 C67,28 76,37 76,54 C76,71 67,80 54,80 L32,80 Z M46,40 L65,54 L46,68 Z" />
+    <!-- Subtle accent play highlight inside triangle -->
+    <path
+        android:fillColor="#EC4899"
+        android:pathData="M48,43 L63,54 L48,65 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M51,47 L60,54 L51,61 Z" />
+</vector>

@@ -1,0 +1,6 @@
+{
+  "name": "DramaStream",
+  "description": "A vertical micro-drama streaming app serving short, episodic cliffhanger-driven series.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
